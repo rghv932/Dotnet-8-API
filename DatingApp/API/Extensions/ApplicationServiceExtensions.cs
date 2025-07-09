@@ -1,4 +1,5 @@
 ﻿using API.Data;
+using API.Helpers;
 using API.Interfaces;
 using API.Services;
 using Microsoft.EntityFrameworkCore;
@@ -17,16 +18,15 @@ public static class ApplicationServiceExtensions
         services.AddCors();
         services.AddScoped<ITokenService, TokenService>();
         //services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
-        services.AddScoped<ITokenService, TokenService>();
         //services.AddScoped<IPhotoService, PhotoService>();
         //services.AddScoped<ILikesRepository, LikesRepository>();
         //services.AddScoped<LogUserActivity>();
-        //services.AddScoped<IUserRepository, UserRepository>();
-        //services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+        //services.AddEndpointsApiExplorer();
+        //services.AddSwaggerGen();
 
         return services;
     }

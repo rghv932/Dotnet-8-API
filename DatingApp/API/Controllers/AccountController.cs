@@ -15,35 +15,36 @@ public class AccountController(DataContext context, ITokenService tokenService) 
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
         if (await UserExists(registerDto.Username)) return BadRequest("Username is taken");
+        return Ok();
         //var user = _mapper.Map<AppUser>(registerDto);
-        using var hmac = new HMACSHA512();
+        //using var hmac = new HMACSHA512();
 
-        var user = new AppUser
-        {
-            UserName = registerDto.Username.ToLower(),
-            PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-            PasswordSalt = hmac.Key
-        };
+        //var user = new AppUser
+        //{
+        //    UserName = registerDto.Username.ToLower(),
+        //    PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
+        //    PasswordSalt = hmac.Key
+        //};
 
-        context.Users.Add(user);
-        await context.SaveChangesAsync();
+        //context.Users.Add(user);
+        //await context.SaveChangesAsync();
 
-        //return user;
-
-
-        //user.UserName = registerDto.Username.ToLower();
-        //user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password));
-        //user.PasswordSalt = hmac.Key;
+        ////return user;
 
 
-        //_context.Users.Add(user);
-        //await _context.SaveChangesAsync();
+        ////user.UserName = registerDto.Username.ToLower();
+        ////user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password));
+        ////user.PasswordSalt = hmac.Key;
 
-        return new UserDto
-        {
-            Username = user.UserName,
-            Token = tokenService.CreateToken(user)
-        };
+
+        ////_context.Users.Add(user);
+        ////await _context.SaveChangesAsync();
+
+        //return new UserDto
+        //{
+        //    Username = user.UserName,
+        //    Token = tokenService.CreateToken(user)
+        //};
         //KnownAs = user.KnownAs,
         //Gender = user.Gender
     }
