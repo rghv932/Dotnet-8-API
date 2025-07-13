@@ -4,11 +4,12 @@ using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace API.Controllers;
 
 [Authorize]
-public class UsersController(IUserRepository userRepository, IPhotoService photoService) : BaseApiController
+public class UsersController(IUserRepository userRepository, IMapper mapper, IPhotoService photoService) : BaseApiController
 {
 
     [HttpGet]
@@ -42,11 +43,15 @@ public class UsersController(IUserRepository userRepository, IPhotoService photo
     [HttpPut]
     public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
     {
-        var user = await userRepository.GetUserByUsernameAsync(User.GetUsername());
+        var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (username == null) return BadRequest("No username found");
+        var user = await userRepository.GetUserByUsernameAsync(username);
+        if (user is null) return BadRequest("Could not find user");
 
         mapper.Map(memberUpdateDto, user);
 
-        userRepository.Update(user);
+        //userRepository.Update(user);
 
         if (await userRepository.SaveAllAsync()) return NoContent();
 
